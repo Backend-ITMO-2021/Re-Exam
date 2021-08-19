@@ -1,4 +1,4 @@
-package com.sb.ifmodemo.demo.controllers;
+package com.sb.ifmo_reexam.reexam.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

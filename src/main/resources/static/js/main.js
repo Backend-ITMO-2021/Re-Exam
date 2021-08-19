@@ -4,54 +4,6 @@ $(document).ready(function () {
 
 let timerId = setInterval(() => updateInfo(), 2000);
 
-function draw(authorized, users, game) {
-    if(authorized) {
-        $('#feedback').prop("hidden", true)
-        $('#logout').prop("hidden", false)
-        $('#registration_login').prop("hidden", true)
-        $('#field').prop("hidden", true)
-        $('#users').prop("hidden", true)
-
-        if(game !== undefined) {
-
-            if(game["winner"] !== undefined) {
-                $('#winner').html("<pre>Winner: "+game["winner"]+"</pre>")
-            } else {
-                $('#winner').html("")
-            }
-
-            $('#field').prop("hidden", false)
-            var field = game["field"]
-            for (var i = 0; i < field.length; i++) {
-                $("#bt"+i).text(field[i]);
-                if(!game["play"] || field[i] !== '*') {
-                    $("#bt"+i).prop("disabled", true);
-                } else if(field[i] === '*') {
-                    $("#bt"+i).prop("disabled", false);
-                }
-            }
-        } else {
-            var usersView = ""
-            for (var i = 0; i < users.length; i++) {
-                var user = users[i]
-                usersView += "<div><pre>" + user["name"] + "</pre><button onclick='startGame(" + user["id"] + ")'>Play</button></div>"
-            }
-            $('#users').html(usersView).prop("hidden", false)
-        }
-
-    } else {
-        $('#field').prop("hidden", true)
-        $('#feedback').prop("hidden", false)
-        $('#logout').prop("hidden", true)
-        $('#registration_login').prop("hidden", false)
-        $('#users').prop("hidden", true)
-    }
-}
-
-function logout() {
-    sessionStorage.clear()
-}
-
 function updateInfo() {
     $.ajax({
         type: "GET",
