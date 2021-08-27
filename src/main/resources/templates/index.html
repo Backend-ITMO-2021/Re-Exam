@@ -1,72 +1,28 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>IFMO Reexam App</title>
+    <title>Ifmo Re-exam</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-    <link rel="stylesheet" type="text/css"
-          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.2.0/css/bootstrap.min.css"/>
 </head>
 <body>
-
 <div class="container" style="min-height: 500px">
+    <div class="unauthenticated">
+        <a class="btn btn-primary btn-lg" href="/oauth2/authorization/google">Login ith Google</a>
+    </div>
+    <div class="authenticated" style="display: none">
+        <h3>Logged in as: <span id="username"></span></h3>
+        <br><br>
 
-    <div class="starter-template">
-        <span style="background: #a7c7ff; font-size: 250%" th:text="${title}"></span>
 
-        <div id="feedback"></div>
 
-        <div id="field">
-            <div>
-                <button id="bt0" onclick="press(0)" class="btn btn-primary btn-lg">0</button>
-                <button id="bt1" onclick="press(1)" class="btn btn-primary btn-lg">1</button>
-                <button id="bt2" onclick="press(2)" class="btn btn-primary btn-lg">2</button>
-            </div>
-            <div>
-                <button id="bt3" onclick="press(3)" class="btn btn-primary btn-lg">3</button>
-                <button id="bt4" onclick="press(4)" class="btn btn-primary btn-lg">4</button>
-                <button id="bt5" onclick="press(5)" class="btn btn-primary btn-lg">5</button>
-            </div>
-            <div>
-                <button id="bt6" onclick="press(6)" class="btn btn-primary btn-lg">6</button>
-                <button id="bt7" onclick="press(7)" class="btn btn-primary btn-lg">7</button>
-                <button id="bt8" onclick="press(8)" class="btn btn-primary btn-lg">8</button>
-            </div>
-            <div id="winner"></div>
-            <button id="leave" onclick="leave()" class="btn btn-primary btn-lg">Leave Game</button>
+        <div>
+            <button onClick="logout()" class="btn btn-primary btn-lg">Logout</button>
         </div>
-
-        <div id="users"></div>
-
-
-        <div id="logout">
-            <button id="logout-bt" onclick="logout()" class="btn btn-primary btn-lg">Logout</button>
-        </div>
-
-        <div id="registration_login">
-            <label for="login_name">Username</label>
-            <input id="login_name"><br>
-            <label for="login_password">Password</label>
-            <input id="login_password"><br>
-            <button id="login" onclick="login()" class="btn btn-primary btn-lg">Login</button>
-            <br><br>
-            <label for="reg_name">Username</label>
-            <input id="reg_name"><br>
-            <label for="reg_password">Password</label>
-            <input id="reg_password"><br>
-            <button id="register" onclick="registerF()" class="btn btn-primary btn-lg">Register</button>
-        </div>
-
     </div>
 
 </div>
-
-<script type="text/javascript"
-        src="webjars/jquery/2.2.4/jquery.min.js"></script>
-
+<script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
-
 </body>
 </html>
