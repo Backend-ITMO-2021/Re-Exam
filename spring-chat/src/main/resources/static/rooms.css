@@ -1,0 +1,27 @@
+.container {
+    margin-top: 14vh;
+    border: 1px solid darkgray;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.logout_btn {
+
+}
+
+.greeting {
+    display: flex;
+}
+
+.room-constructor-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.room-constructor {
+    width: 50vw;
+}

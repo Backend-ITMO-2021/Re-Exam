@@ -1,0 +1,133 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: #333;
+    height: 100%;
+}
+.form-control {
+    width: 100%;
+    min-height: 38px;
+    font-size: 15px;
+    border: 1px solid #c8c8c8;
+}
+.form-group {
+    margin-top: 1vh;
+    margin-bottom: 15px;
+}
+input {
+    padding-left: 10px;
+    outline: none;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+h1 {
+    font-size: 1.7em;
+}
+a {
+    color: #128ff2;
+}
+
+#chat-page {
+    position: relative;
+    height: 100%;
+}
+.chat-container {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    margin-top: 30px;
+    height: calc(100% - 60px);
+    max-height: 600px;
+    position: relative;
+}
+#messageArea {
+    list-style-type: none;
+    background-color: #FFF;
+    margin: 0;
+    overflow: auto;
+    overflow-y: scroll;
+    padding: 0 20px 0px 20px;
+    height: 34vh;
+    border-radius: 5px;
+}
+
+#messageArea ul li {
+    line-height: 1.5rem;
+    padding: 10px 20px;
+    margin: 0;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+.event-message {
+    width: 100%;
+    text-align: center;
+    clear: both;
+}
+.event-message p {
+    color: #777;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+.chat-message {
+    padding-left: 68px;
+    position: relative;
+}
+.chat-message i {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 18px;
+    line-height: 42px;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+    font-style: normal;
+    text-transform: uppercase;
+}
+.chat-message span {
+    color: #333;
+    font-weight: 600;
+}
+.chat-message p {
+    color: #43464b;
+}
+#messageForm .input-group button {
+    float: left;
+    width: 80px;
+    height: 38px;
+    margin-left: 5px;
+}
+
+.connecting {
+    padding-bottom: 2vh;
+    text-align: center;
+    color: #777;
+    width: 100%;
+}
+
+
+/*#messageArea {*/
+/*    height: 14vh;*/
+/*    width: 100%;*/
+/*    background-color: #fafafa;*/
+/*}*/
+
+/*m   */
+#members-list-item {
+    height: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
