@@ -16,11 +16,7 @@ import java.io.IOException;
 public class CustomSimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     protected final Log logger = LogFactory.getLog(this.getClass());
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
-    public CustomSimpleUrlAuthenticationSuccessHandler() {
-        super();
-    }
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     // API
 
@@ -33,7 +29,7 @@ public class CustomSimpleUrlAuthenticationSuccessHandler implements Authenticati
     // IMPL
 
     protected void handle(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException {
-        final String targetUrl = determineTargetUrl(authentication);
+        final String targetUrl = determineTargetUrl();
 
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
@@ -43,7 +39,7 @@ public class CustomSimpleUrlAuthenticationSuccessHandler implements Authenticati
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(final Authentication authentication) {
+    protected String determineTargetUrl() {
         return "/";
     }
 

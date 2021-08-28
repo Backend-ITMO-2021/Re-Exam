@@ -1,6 +1,5 @@
 package com.sb.ifmo.reexam.config;
 
-import com.sb.ifmo.reexam.data.CustomUser;
 import com.sb.ifmo.reexam.security.CustomSimpleUrlAuthenticationSuccessHandler;
 import com.sb.ifmo.reexam.services.CustomOidcUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
         return new CustomSimpleUrlAuthenticationSuccessHandler();
     }
 
@@ -36,15 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/",
-                                "/error",
-                                "/webjars/**",
-                                "/**/*.png",
-                                "/**/*.gif",
-                                "/**/*.svg",
-                                "/**/*.jpg",
-                                "/**/*.html",
-                                "/**/*.css",
-                                "/**/*.js").permitAll()
+                        "/error",
+                        "/webjars/**",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
@@ -59,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService())
                 .oauth2Login()
                 .userInfoEndpoint()
-                .customUserType(CustomUser.class, "google")
                 .oidcUserService(customOidcUserService);
         // @formatter:on
     }

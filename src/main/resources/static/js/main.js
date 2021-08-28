@@ -1,6 +1,7 @@
-window.onload = function () {
+$(document).ready(function () {
     $.ajaxSetup({
-        beforeSend : function(xhr, settings) {
+        headers: {"Content-Type":  "application/json"},
+        beforeSend: function (xhr, settings) {
             if (settings.type == 'POST' || settings.type == 'PUT'
                 || settings.type == 'DELETE') {
                 if (!(/^http:.*/.test(settings.url) || /^https:.*/
@@ -12,25 +13,40 @@ window.onload = function () {
             }
         }
     });
-    getUserName()
-};
+    let username = "";
+    getUserName();
+    console.log(username);
+    let currentRoomId = 0;
+});
+
 
 function getUserName() {
-    $.get("/user", function(data) {
-        this.username = data.username;
-        this.userid = data.id;
-        $("#username").html(this.username);
-        $(".unauthenticated").hide();
-        $(".authenticated").show();
+    // TODO: figure out how to save data (room_id)
+    $.get("/me/username").then(data => {
+        username = data.username;
+        $('#name').html(username);
+        $('.unauthenticated').hide();
+        $('.authenticated').show();
     });
 }
+
 function getRooms() {
-    $.get("/");
+    console.log("Response /rooms/");
+    console.log($.get("/rooms/"));
 }
 
+function getRoom(id) {
+    $.get(`/rooms/${id}`);
+}
+
+function createRoom() {
+    $.post("/rooms/create",
+        JSON.stringify({"name": "NewRoomName", "isPrivate": false})
+    ).then(data => getRoom(data.room_id));
+}
 
 function logout() {
-    $.post("/logout", function() {
+    $.post("/logout").then(() => {
         $("#user").html('');
         $(".unauthenticated").show();
         $(".authenticated").hide();
