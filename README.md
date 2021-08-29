@@ -1,3 +1,5 @@
+Heroku: https://javaspringchat.herokuapp.com
+
 # Re-Exam
 Все задания сдаются как пулл-реквест к этому репозиторию.
 

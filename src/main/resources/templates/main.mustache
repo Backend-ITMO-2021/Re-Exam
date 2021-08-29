@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<br>
+
+<h1> Hello, {{user}} </h1>
+<h1> Сменить имя </h1>
+<form action="/change_name" method="post">
+
+    <input type="text" name="name" placeholder="Введите новое имя">
+    <button type="submit">
+        Поменять
+    </button>
+</form>
+
+<br> Публичные комнаты:
+{{#rooms}}
+        <br><a href="/enter_room/{{id}}">{{title}}</a>
+{{/rooms}}
+
+<br> Ваши приватные комнаты:
+
+{{#private_rooms}}
+        <br><a href="/enter_room/{{id}}">{{title}}</a>
+{{/private_rooms}}
+
+<h1>
+    <a href="create_room">
+        Создать комнату
+    </a>
+</h1>
+
+<form action="/logout" method="post">
+    <button class="btn btn-primary" type="submit">
+        Logout
+    </button>
+</form>
+
+</body>
+</html>

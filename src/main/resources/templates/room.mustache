@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="height: 20px">
+</div>
+<br><a href="/main">Назад на главную</a>
+<body>
+<div style="height: 50px">
+</div>
+<b><br> Сообщения </b>
+{{#messages}}
+    <br><b>{{stringDate}} {{author.username}}:</b> {{text}}</br>
+{{/messages}}
+<form action="/{{roomId}}/send_message" method="post">
+    <input type="text" name="text" placeholder="Введите письмо" style="width: 600px">
+    <button type="submit">
+        Отправить
+    </button>
+</form>
+<h1>admin: {{admin}} </h1>
+
+<div style="height: 100px"></div>
+
+<h1>Комната:{{room_name}}</h1>
+<h1>Пользователи:</h1>
+{{#users}}
+    <br> {{username}}
+{{/users}}
+
+{{#is_admin}}
+    <hr align="left" width="100%" size="2" color="#ff0000" />
+    <br><b> Вы администратор комнаты</b>
+    <br><b> Тип комнаты:</b> {{type}}
+    <form action="/{{roomId}}/add_user" method="post">
+        <input type="text" name="username" placeholder="введите имя пользователя">
+        <button type="submit">
+            Добавить пользователя
+        </button>
+    </form>
+    <br>
+    <form action="/{{roomId}}/change_name" method="post">
+        <input type="text" name="name" placeholder="введите имя">
+        <button type="submit">
+            Изменить имя комнаты
+        </button>
+    </form>
+    <br>
+    <form action="/{{roomId}}/change" method="post">
+        <button type="submit">
+            Поменять тип на: {{switched_type}}
+        </button>
+    </form>
+
+    {{#error}}
+        <b style="color: red">{{error}}</b>
+    {{/error}}
+{{/is_admin}}
+
+
+</body>
+</html>
