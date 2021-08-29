@@ -14,7 +14,7 @@ import java.util.*;
 @EntityListeners(AuditingEntityListener.class)
 public class CustomUser implements OAuth2User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "username", unique = true)
@@ -23,7 +23,7 @@ public class CustomUser implements OAuth2User {
     @Column(name = "email", unique = true)
     private String email;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<Room> joinedRooms;
 
     @OneToMany(mappedBy = "admin")
@@ -120,9 +120,10 @@ public class CustomUser implements OAuth2User {
 
     @Override
     public String toString() {
-        JSONObject response = new JSONObject();
-        response.put("username", this.username);
-        response.put("email", this.email);
-        return response.toString();
+        JSONObject customUserJSON = new JSONObject();
+        customUserJSON.put("id", this.id);
+        customUserJSON.put("username", this.username);
+        customUserJSON.put("email", this.email);
+        return customUserJSON.toString();
     }
 }

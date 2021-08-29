@@ -6,15 +6,38 @@
     <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.2.0/css/bootstrap.min.css"/>
 </head>
 <body>
-<div class="container" style="min-height: 500px">
+<div class="container">
     <div class="unauthenticated">
         <a class="btn btn-primary btn-lg" href="/oauth2/authorization/google">Login ith Google</a>
     </div>
     <div class="authenticated" style="display: none">
-        <h3>Logged in as: <span id="name"></span></h3>
-        <br><br>
-
-
+        <h3>Logged in as: <span id="username"></span></h3>
+        <div id="username-change" style="display: none"></div>
+        <hr>
+        <br>
+        <div id="rooms">
+            <ul id="rooms-list">
+            </ul>
+            <div id="rooms-create">
+                <label for="rooms-create-name">New room name </label>
+                <input id="rooms-create-name">
+                <label for="rooms-create-private">isPrivate: </label>
+                <input id="rooms-create-private" type="checkbox"><br>
+                <button id="rooms-create-button" class="btn btn-lg" onclick="createRoom()">Create new room</button>
+            </div>
+        </div>
+        <div id="room" style="display: none">
+            <h4 id="room-name"></h4>
+            <h6 id="room-admin"></h6>
+            <ul id="room-messages"></ul>
+            <div id="room-messages-create">
+                <input id="room-id" type="hidden">
+                <label for="room-messages-create-text">Text </label><input id="room-messages-create-text">
+                <button id="room-messages-create-button" class="btn btn-lg" onclick="createMessage()">Post</button>
+            </div>
+        </div>
+        <div id="room-stats-top" style="display: none"></div>
+        <br>
         <div>
             <button onClick="logout()" class="btn btn-primary btn-lg">Logout</button>
         </div>

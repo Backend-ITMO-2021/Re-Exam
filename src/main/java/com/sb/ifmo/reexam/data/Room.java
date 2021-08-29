@@ -1,17 +1,18 @@
 package com.sb.ifmo.reexam.data;
 
+import org.hibernate.mapping.Collection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Table(name = "rooms")
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "is_private")
@@ -24,18 +25,18 @@ public class Room {
     @JoinColumn(name = "admin_id", nullable = false)
     private CustomUser admin;
 
-    @ManyToMany(mappedBy = "joinedRooms")
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<CustomUser> users;
 
-    @OneToMany(mappedBy = "room")
-    private Set<Message> messages;
+    @OneToMany(mappedBy = "room", fetch = FetchType.EAGER)
+    private List<Message> messages;
 
     public Room(String name, boolean isPrivate, CustomUser admin) {
         this.name = name;
         this.isPrivate = isPrivate;
         this.admin = admin;
-        this.users = new HashSet<>();
-        this.messages = new HashSet<>();
+        this.users = Collections.singleton(admin);
+        this.messages = new ArrayList<>();
     }
 
     public Room() {
@@ -83,11 +84,11 @@ public class Room {
         this.users = users;
     }
 
-    public Set<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(Set<Message> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 
@@ -95,13 +96,7 @@ public class Room {
         if (!this.isPrivate) {
             return true;
         }
-        if (this.admin == principal) {
-            return true;
-        }
-        if (this.users.contains(principal)) {
-            return true;
-        }
-        return false;
+        return this.users.contains(principal);
     }
 
     public void addUser(CustomUser newUser) {
@@ -110,17 +105,30 @@ public class Room {
 
     @Override
     public String toString() {
-        JSONObject response = new JSONObject();
-        response.put("id", this.id);
-        response.put("isPrivate", this.isPrivate);
-        response.put("name", this.name);
-        response.put("admin", this.admin);
+        JSONObject roomJSON = new JSONObject();
+        roomJSON.put("id", this.id);
+        roomJSON.put("isPrivate", this.isPrivate);
+        roomJSON.put("name", this.name);
+        return roomJSON.toString();
+    }
+
+    public String toStringFull() {
+        JSONObject roomJSON = new JSONObject();
+        roomJSON.put("id", this.id);
+        roomJSON.put("isPrivate", this.isPrivate);
+        roomJSON.put("name", this.name);
+        roomJSON.put("admin", this.admin);
         JSONArray usersJSON = new JSONArray();
         for (CustomUser user : this.users) {
             usersJSON.put(user);
         }
-        response.put("users", usersJSON);
-        response.put("messages", this.messages);
-        return response.toString();
+        roomJSON.put("users", usersJSON);
+        JSONArray messagesJSON = new JSONArray();
+        this.messages.sort((Message m1, Message m2) -> String.CASE_INSENSITIVE_ORDER.compare(m1.getTime().toString(), m2.getTime().toString()));
+        for (Message message : this.messages) {
+            messagesJSON.put(message);
+        }
+        roomJSON.put("messages", messagesJSON);
+        return roomJSON.toString();
     }
 }

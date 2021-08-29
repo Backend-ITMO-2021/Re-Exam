@@ -3,16 +3,22 @@ package com.sb.ifmo.reexam.data;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "messages")
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "text")
     private String text;
+
+    @Column(name = "time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime time;
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
@@ -24,6 +30,7 @@ public class Message {
 
     public Message(String text, Room room, CustomUser user) {
         this.text = text;
+        this.time = LocalDateTime.now();
         this.room = room;
         this.user = user;
     }
@@ -48,6 +55,14 @@ public class Message {
         this.text = text;
     }
 
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+
     public Room getRoom() {
         return room;
     }
@@ -66,11 +81,11 @@ public class Message {
 
     @Override
     public String toString() {
-        JSONObject response = new JSONObject();
-        response.put("id", this.id);
-        response.put("text", this.text);
-        response.put("room_id", this.room.getId());
-        response.put("user", this.user);
-        return response.toString();
+        JSONObject messageJSON = new JSONObject();
+        messageJSON.put("text", this.text);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        messageJSON.put("time", this.time.format(formatter));
+        messageJSON.put("user", this.user);
+        return messageJSON.toString();
     }
 }
