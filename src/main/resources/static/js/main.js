@@ -16,7 +16,12 @@ $(document).ready(function () {
     getMyUsername();
 });
 
+let timerId;
+let timerOn = false;
+
 function getMyUsername() {
+    clearInterval(timerId);
+    timerOn = false;
     $.get("/me/username")
         .then(data => {
             $('#username').html(data.username);
@@ -27,6 +32,8 @@ function getMyUsername() {
 }
 
 function getRooms() {
+    clearInterval(timerId);
+    timerOn = false;
     $.get("/rooms/").then(roomsListData => {
         $("#rooms").show();
         $("#room").hide();
@@ -55,6 +62,10 @@ function getRooms() {
 }
 
 function getRoom(room_id) {
+    if (!timerOn) {
+        timerId = setInterval(() => getRoom(room_id), 1000);
+        timerOn = true;
+    }
     $.get(`/${room_id}`).then(roomData => {
         if (roomData.error !== undefined) {
             console.log(`getRoom(${room_id}) error`);
@@ -93,6 +104,8 @@ function getRoom(room_id) {
 }
 
 function getRoomAllMessages() {
+    clearInterval(timerId);
+    timerOn = false;
     const room_id = $("#room-id").val();
     let requestBody = {};
 
@@ -133,6 +146,8 @@ function getRoomAllMessages() {
 }
 
 function getRoomStatsTop() {
+    clearInterval(timerId);
+    timerOn = false;
     const room_id = $("#room-id").val();
     $.get(`/${room_id}/stats/top`).then(roomStatsTopData => {
         if (roomStatsTopData.error !== undefined) {
@@ -164,6 +179,8 @@ function getRoomStatsTop() {
 }
 
 function getUserMessages(room_id, username) {
+    clearInterval(timerId);
+    timerOn = false;
     $.get(`/${room_id}/messages/${username}`).then(messagesUsernameData => {
         if (messagesUsernameData.error !== undefined) {
             console.log("getUserMessages() error");
@@ -303,6 +320,8 @@ function createRoom() {
 }
 
 function logout() {
+    clearInterval(timerId);
+    timerOn = false;
     $.post("/logout").then(() => {
         $("#user").html('');
         $(".unauthenticated").show();
