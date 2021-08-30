@@ -8,6 +8,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 @SpringBootApplication
 public class ReexamApplication {
     private static final Logger logger = LoggerFactory.getLogger(ReexamApplication.class);
@@ -80,9 +84,9 @@ public class ReexamApplication {
                             logger.error("Couldn't find user \"testUser"  + j + "\" with i = " + i);
                         }
                         for (int k = 1; k <= i + j; k++) {
-                            // TODO: add delay so message.time would be different
+                            Date messageTime = new GregorianCalendar(2021, Calendar.AUGUST, 15 + k, i, j, i+j).getTime();
                             messageRepository.save(new Message("Test message " + k + " in room " + i + " by user " + j,
-                                    room, user));
+                                    room, user, messageTime));
                         }
                     }
                 }

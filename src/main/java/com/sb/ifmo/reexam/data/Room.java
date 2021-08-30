@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "rooms")
@@ -123,12 +124,8 @@ public class Room {
             usersJSON.put(user);
         }
         roomJSON.put("users", usersJSON);
-        JSONArray messagesJSON = new JSONArray();
-        this.messages.sort((Message m1, Message m2) -> String.CASE_INSENSITIVE_ORDER.compare(m1.getTime().toString(), m2.getTime().toString()));
-        for (Message message : this.messages) {
-            messagesJSON.put(message);
-        }
-        roomJSON.put("messages", messagesJSON);
+        Collections.sort(this.messages);
+        roomJSON.put("messages", messages.stream().map(Message::toString).collect(Collectors.toList()));
         return roomJSON.toString();
     }
 }

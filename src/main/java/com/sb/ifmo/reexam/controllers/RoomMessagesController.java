@@ -9,6 +9,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,19 +26,7 @@ public class RoomMessagesController {
     @Autowired
     private MessageRepository messageRepository;
 
-    @GetMapping
-    public String roomMessages(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id) {
-        CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));
-        Room room = roomRepository.findById(room_id);
-        if (room.isAvailabe(userByPrincipal)) {
-            JSONObject response = new JSONObject();
-            response.put("messages", room.getMessages().toString());
-            return response.toString();
-        } else {
-            return "{\"error\":\"This room is private\"}";
-        }
-    }
-
+    // tested
     @GetMapping("{username}")
     public String roomMessagesByUsername(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id, @PathVariable String username) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));
@@ -45,8 +35,9 @@ public class RoomMessagesController {
         if (user != null) {
             if (room.isAvailabe(userByPrincipal)) {
                 JSONObject response = new JSONObject();
-                Set<String> messages = messageRepository.findAllByRoomAndUser(room, user).stream().map(Message::toString).collect(Collectors.toSet());
-                response.put("messages", messages);
+                List<Message> messages = messageRepository.findAllByRoomAndUser(room, user);
+                Collections.sort(messages);
+                response.put("messages", messages.stream().map(Message::toString).collect(Collectors.toSet()));
                 return response.toString();
             } else {
                 return "{\"error\":\"This room is private\"}";
@@ -57,6 +48,7 @@ public class RoomMessagesController {
 
     }
 
+    // tested
     @PostMapping("/create")
     public String messageCreate(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id, @RequestBody CreateMessageRequest requestBody) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));

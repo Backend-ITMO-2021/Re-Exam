@@ -3,12 +3,14 @@ package com.sb.ifmo.reexam.data;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Entity
 @Table(name = "messages")
-public class Message {
+public class Message implements Comparable<Message> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -18,7 +20,7 @@ public class Message {
 
     @Column(name = "time")
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime time;
+    private Date time;
 
     @ManyToOne
     @JoinColumn(name = "room_id", nullable = false)
@@ -30,7 +32,14 @@ public class Message {
 
     public Message(String text, Room room, CustomUser user) {
         this.text = text;
-        this.time = LocalDateTime.now();
+            this.time = new Date();
+        this.room = room;
+        this.user = user;
+    }
+
+    public Message(String text, Room room, CustomUser user, Date time) {
+        this.text = text;
+        this.time = time;
         this.room = room;
         this.user = user;
     }
@@ -55,11 +64,11 @@ public class Message {
         this.text = text;
     }
 
-    public LocalDateTime getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
@@ -82,10 +91,19 @@ public class Message {
     @Override
     public String toString() {
         JSONObject messageJSON = new JSONObject();
+        messageJSON.put("id", this.id);
         messageJSON.put("text", this.text);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        messageJSON.put("time", this.time.format(formatter));
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM HH:mm:ss");
+        messageJSON.put("time", formatter.format(this.time));
         messageJSON.put("user", this.user);
         return messageJSON.toString();
+    }
+
+    @Override
+    public int compareTo(Message other) {
+        if (time == null || other.time == null) {
+            return 0;
+        }
+        return time.compareTo(other.time);
     }
 }

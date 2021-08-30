@@ -8,38 +8,70 @@
 <body>
 <div class="container">
     <div class="unauthenticated">
-        <a class="btn btn-primary btn-lg" href="/oauth2/authorization/google">Login ith Google</a>
+        <h3><a class="btn btn-primary btn-lg" href="/oauth2/authorization/google">Login ith Google</a></h3>
     </div>
     <div class="authenticated" style="display: none">
         <h3>Logged in as: <span id="username"></span></h3>
-        <div id="username-change" style="display: none"></div>
+        <div id="username-change">
+            <label for="username-change-new-username">New username: </label><input id="username-change-new-username">
+            <button id="username-change-button" class="btn btn-default" onclick="changeMyUsername()">Change username</button>
+        </div>
         <hr>
         <br>
         <div id="rooms">
-            <ul id="rooms-list">
-            </ul>
+            <ul id="rooms-list"></ul>
             <div id="rooms-create">
                 <label for="rooms-create-name">New room name </label>
                 <input id="rooms-create-name">
                 <label for="rooms-create-private">isPrivate: </label>
                 <input id="rooms-create-private" type="checkbox"><br>
-                <button id="rooms-create-button" class="btn btn-lg" onclick="createRoom()">Create new room</button>
+                <button id="rooms-create-button" class="btn btn-primary btn-default" onclick="createRoom()">Create new room</button>
             </div>
         </div>
         <div id="room" style="display: none">
-            <h4 id="room-name"></h4>
-            <h6 id="room-admin"></h6>
+            <button id="room-back-button" class="btn btn-default" onclick="getRooms()">Back</button>
+            <h3 id="room-name"></h3>
+            <h5 id="room-admin">Admin is <div id="room-admin-name"></div></h5>
+            <div id="room-all-messages">
+                <label for="room-all-messages-from">From date: </label>
+                <input id="room-all-messages-from" type="date"><br>
+                <label for="room-all-messages-to">To date: </label>
+                <input id="room-all-messages-to" type="date"><br>
+                <button id="room-all-messages-button" class="btn btn-sm" onclick="getRoomAllMessages()">Get room all messages</button>
+            </div>
+            <div id="room-name-change" style="display: none">
+                <label for="room-name-change-new-room-name">New room name: </label>
+                <input id="room-name-change-new-room-name"><br>
+                <button id="room-name-change-button" class="btn btn-sm" onclick="changeRoomName()">Change room name</button>
+            </div>
+            <div id="room-private-change" style="display: none">
+                <button id="room-private-change-button" class="btn btn-sm" onclick="changeRoomPrivate()">Make room private</button>
+            </div>
+            <div id="room-invite" style="display: none">
+                <label for="room-invite-username">Invite username: </label>
+                <input id="room-invite-username"><br>
+                <button id="room-invite-button" class="btn btn-sm" onclick="inviteUser()">Invite user</button>
+            </div>
+            <div id="room-get-stats-top">
+                <button id="room-get-stats-top-button" class="btn btn-sm" onclick="getRoomStatsTop()">Get the most chatty users</button>
+            </div>
+            <div id="room-all-messages-from-text" style="display: none">Messages from <div id="room-all-messages-from-text-value"></div></div><br>
+            <div id="room-all-messages-to-text" style="display: none">to <div id="room-all-messages-to-text-value"></div></div>
+            <hr>
             <ul id="room-messages"></ul>
             <div id="room-messages-create">
                 <input id="room-id" type="hidden">
-                <label for="room-messages-create-text">Text </label><input id="room-messages-create-text">
-                <button id="room-messages-create-button" class="btn btn-lg" onclick="createMessage()">Post</button>
+                <label for="room-messages-create-text">Text: </label><input id="room-messages-create-text">
+                <button id="room-messages-create-button" class="btn btn-primary" onclick="createMessage()">Post</button>
             </div>
         </div>
-        <div id="room-stats-top" style="display: none"></div>
+        <div id="room-stats" style="display: none">
+            <button id="room-stats-back-button" class="btn btn-default" onclick="getRooms()">Back</button>
+            <ul id="room-stats-top"></ul>
+        </div>
         <br>
         <div>
-            <button onClick="logout()" class="btn btn-primary btn-lg">Logout</button>
+            <button onClick="logout()" class="btn btn-lg">Logout</button>
         </div>
     </div>
 

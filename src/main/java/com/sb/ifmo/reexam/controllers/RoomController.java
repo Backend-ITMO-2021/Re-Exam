@@ -7,14 +7,17 @@ import com.sb.ifmo.reexam.requests.InviteRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/{room_id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,6 +34,7 @@ public class RoomController {
     @Autowired
     private MessagesTopRepository messagesTopRepository;
 
+    // tested
     @GetMapping
     public String room(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));
@@ -47,18 +51,15 @@ public class RoomController {
         }
     }
 
+    //tested
     @GetMapping("stats/top")
     public String roomStatsTop(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));
         Room room = roomRepository.findById(room_id);
         if (room.isAvailabe(userByPrincipal)) {
-            Set<MessagesTop> top = messagesTopRepository.findTop10ByRoomGroupByUserOrderByCountDesc(room);
+            List<String> top = messagesTopRepository.findTopByRoomGroupByUserOrderByCountDesc(room, PageRequest.of(0, 10)).stream().map(MessagesTop::toString).collect(Collectors.toList());
             JSONObject response = new JSONObject();
-            JSONArray topJSONArray = new JSONArray();
-            for (MessagesTop messagesTop : top) {
-                topJSONArray.put(messagesTop);
-            }
-            response.put("top", topJSONArray);
+            response.put("top", top);
             return response.toString();
         } else {
             return "{\"error\":\"This room is private\"}";
@@ -71,15 +72,16 @@ public class RoomController {
         Room room = roomRepository.findById(room_id);
         if (room.isAvailabe(userByPrincipal)) {
             JSONObject response = new JSONObject();
-            List messages = messageRepository.findAllByRoomAndTimeBetween(room, requestBody.getFrom().atStartOfDay(), requestBody.getTo().atTime(23, 59, 59));
-            JSONArray messagesJSON = new JSONArray(messages);
-            response.put("messages", messagesJSON);
+            List<Message> messages = messageRepository.findAllByRoomAndTimeBetween(room, requestBody.getFrom(), requestBody.getTo());
+            Collections.sort(messages);
+            response.put("messages", messages.stream().map(Message::toString).collect(Collectors.toList()));
             return response.toString();
         } else {
             return "{\"error\":\"This room is private\"}";
         }
     }
 
+    // tested
     @PostMapping("/invite")
     public String roomInvite(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id, @RequestBody InviteRequest requestBody) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));
@@ -88,6 +90,7 @@ public class RoomController {
             CustomUser invitedUser = customUserRepository.findByUsernameIs(requestBody.getUsername());
             if (invitedUser != null) {
                 room.addUser(invitedUser);
+                roomRepository.save(room);
             }
             return "{\"message\": \"User was successfully invited\"}";
         } else {
@@ -95,6 +98,7 @@ public class RoomController {
         }
     }
 
+    // tested
     @PostMapping("/make_private")
     public String roomMakePrivate(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));
@@ -108,6 +112,7 @@ public class RoomController {
         }
     }
 
+    // tested
     @PostMapping("/change_name")
     public String roomChangeName(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id, @RequestBody ChangeRoomNameRequest requestBody) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));

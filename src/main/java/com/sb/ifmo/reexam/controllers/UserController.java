@@ -17,6 +17,7 @@ public class UserController {
     @Autowired
     private CustomUserRepository customUserRepository;
 
+    // tested
     @GetMapping("/username")
     public String username(@AuthenticationPrincipal OAuth2User principal) {
 
@@ -27,6 +28,7 @@ public class UserController {
         return response.toString();
     }
 
+    // tested
     @PostMapping("/username/change")
     public String usernameChange(@AuthenticationPrincipal OAuth2User principal, @RequestBody ChangeUsernameRequest requestBody) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));

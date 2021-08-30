@@ -7,8 +7,7 @@ import java.util.Set;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
     Room findById(long id);
-    Set<Room> findAllByIsPrivate(boolean isPrivate);
-    Set<Room> findAllByUsersContains(CustomUser user);
+    Set<Room> findAllByUsersContainsOrIsPrivate(CustomUser user, boolean isPrivate);
     List<Room> findAll();
 
     //Used for initialising
