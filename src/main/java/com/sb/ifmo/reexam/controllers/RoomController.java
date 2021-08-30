@@ -9,14 +9,13 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -66,13 +65,21 @@ public class RoomController {
         }
     }
 
-    @PostMapping("all-messages")
-    public String roomAllMessages(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id, @RequestBody AllMessagesRequest requestBody) {
+    @GetMapping("all-messages")
+    public String roomAllMessages(@AuthenticationPrincipal OAuth2User principal, @PathVariable long room_id, @RequestParam(name = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate, @RequestParam(name = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate) {
         CustomUser userByPrincipal = customUserRepository.findByEmailIs(principal.getAttribute("email"));
         Room room = roomRepository.findById(room_id);
+        if (fromDate == null) {
+            fromDate = new GregorianCalendar(2021, Calendar.AUGUST, 15, 0, 0, 0).getTime();
+        }
+        if (toDate == null) {
+            toDate = new Date();
+        }
+
+
         if (room.isAvailabe(userByPrincipal)) {
             JSONObject response = new JSONObject();
-            List<Message> messages = messageRepository.findAllByRoomAndTimeBetween(room, requestBody.getFrom(), requestBody.getTo());
+            List<Message> messages = messageRepository.findAllByRoomAndTimeBetween(room, fromDate, toDate);
             Collections.sort(messages);
             response.put("messages", messages.stream().map(Message::toString).collect(Collectors.toList()));
             return response.toString();

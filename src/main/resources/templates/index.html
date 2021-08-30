@@ -17,7 +17,6 @@
             <button id="username-change-button" class="btn btn-default" onclick="changeMyUsername()">Change username</button>
         </div>
         <hr>
-        <br>
         <div id="rooms">
             <ul id="rooms-list"></ul>
             <div id="rooms-create">
@@ -38,24 +37,28 @@
                 <label for="room-all-messages-to">To date: </label>
                 <input id="room-all-messages-to" type="date"><br>
                 <button id="room-all-messages-button" class="btn btn-sm" onclick="getRoomAllMessages()">Get room all messages</button>
+                <br>
             </div>
             <div id="room-name-change" style="display: none">
                 <label for="room-name-change-new-room-name">New room name: </label>
                 <input id="room-name-change-new-room-name"><br>
                 <button id="room-name-change-button" class="btn btn-sm" onclick="changeRoomName()">Change room name</button>
+                <br>
             </div>
             <div id="room-private-change" style="display: none">
                 <button id="room-private-change-button" class="btn btn-sm" onclick="changeRoomPrivate()">Make room private</button>
+                <br>
             </div>
             <div id="room-invite" style="display: none">
                 <label for="room-invite-username">Invite username: </label>
                 <input id="room-invite-username"><br>
                 <button id="room-invite-button" class="btn btn-sm" onclick="inviteUser()">Invite user</button>
+                <br>
             </div>
             <div id="room-get-stats-top">
                 <button id="room-get-stats-top-button" class="btn btn-sm" onclick="getRoomStatsTop()">Get the most chatty users</button>
             </div>
-            <div id="room-all-messages-from-text" style="display: none">Messages from <div id="room-all-messages-from-text-value"></div></div><br>
+            <div id="room-all-messages-from-text" style="display: none">Messages from <div id="room-all-messages-from-text-value"></div></div>
             <div id="room-all-messages-to-text" style="display: none">to <div id="room-all-messages-to-text-value"></div></div>
             <hr>
             <ul id="room-messages"></ul>

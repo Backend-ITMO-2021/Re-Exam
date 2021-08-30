@@ -107,19 +107,18 @@ function getRoomAllMessages() {
     clearInterval(timerId);
     timerOn = false;
     const room_id = $("#room-id").val();
-    let requestBody = {};
+    let requestParams = {};
 
     const roomAllMessagesFrom = $("#room-all-messages-from").val();
     if (roomAllMessagesFrom !== "") {
-        requestBody.from = roomAllMessagesFrom;
+        requestParams.from = roomAllMessagesFrom;
     }
     const roomAllMessagesTo = $("#room-all-messages-to").val();
     if (roomAllMessagesTo !== "") {
-        requestBody.to = roomAllMessagesTo;
+        requestParams.to = roomAllMessagesTo;
     }
 
-    $.post(`/${room_id}/all-messages`, JSON.stringify(requestBody)
-    ).then(roomAllMessagesData => {
+    $.get(`/${room_id}/all-messages?` + $.param(requestParams)).then(roomAllMessagesData => {
         if (roomAllMessagesData.error !== undefined) {
             console.log(`getRoomAllMessages() error`);
             console.log(roomAllMessagesData);
@@ -130,10 +129,10 @@ function getRoomAllMessages() {
             $("#room-stats").hide();
             $("#room-all-messages").hide();
 
-            $("#room-all-messages-from-text-value").html();
+            $("#room-all-messages-from-text-value").html(roomAllMessagesFrom);
             $("#room-all-messages-from-text").show();
 
-            $("#room-all-messages-to-text-value").html();
+            $("#room-all-messages-to-text-value").html(roomAllMessagesTo);
             $("#room-all-messages-to-text").show();
 
             $("#room-name-change").hide();
