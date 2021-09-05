@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
 </head>
 <body>
 <div style="height: 20px">
 </div>
 <br><a href="/main">Назад на главную</a>
-<body>
 <div style="height: 50px">
 </div>
 <b><br> Сообщения </b>
-{{#messages}}
-    <br><b>{{stringDate}} {{author.username}}:</b> {{text}}</br>
-{{/messages}}
-<form action="/{{roomId}}/send_message" method="post">
-    <input type="text" name="text" placeholder="Введите письмо" style="width: 600px">
-    <button type="submit">
-        Отправить
-    </button>
+
+<div id="message_list">
+
+</div>
+<form id="message_form">
+    <input type="text" id="message_field" name="text" placeholder="Введите письмо" style="width: 600px">
+    <button type="submit">Отправить</button>
 </form>
 <h1>admin: {{admin}} </h1>
 
@@ -32,7 +33,7 @@
 {{/users}}
 
 {{#is_admin}}
-    <hr align="left" width="100%" size="2" color="#ff0000" />
+    <hr align="left" width="100%" size="2" color="#ff0000"/>
     <br><b> Вы администратор комнаты</b>
     <br><b> Тип комнаты:</b> {{type}}
     <form action="/{{roomId}}/add_user" method="post">
@@ -62,4 +63,40 @@
 
 
 </body>
+<script type="text/javascript">
+    const form = $("#message_form");
+    form.submit(function (e) {
+        $.ajax({
+            url: "/{{roomId}}/send_message",
+            method: 'POST',
+            data: jQuery.param({text: $("#message_field").val()}),
+            success: () => {
+                form[0].reset();
+                doRefresh();
+            }
+        });
+        e.preventDefault();
+    });
+
+    function doRefresh() {
+        $.ajax({
+            url: "/api/{{roomId}}/all-messages",
+            dataType: "text",
+            success: function (data) {
+                const json = $.parseJSON(data);
+                $("#message_list").html(
+                    json["messages"].map(function (msg) {
+                        return "<br><b>" + msg["stringDate"] + " " + msg["username"] + ":</b> " + msg["message"] + "</br>";
+                    }).join("\n")
+                );
+            }
+        });
+    }
+
+    doRefresh();
+
+    $(function () {
+        setInterval(doRefresh, 5000);
+    });
+</script>
 </html>

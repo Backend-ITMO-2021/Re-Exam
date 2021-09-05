@@ -11,11 +11,13 @@ import com.chat.domain.User;
  */
 public class MessageFilteredDto {
     private final Long id;
+    private final String stringDate;
     private final String username;
     private final String message;
 
-    public MessageFilteredDto(Long id, String username, String message) {
+    public MessageFilteredDto(Long id, String stringDate, String username, String message) {
         this.id = id;
+        this.stringDate = stringDate;
         this.username = username;
         this.message = message;
     }
@@ -30,5 +32,9 @@ public class MessageFilteredDto {
 
     public Long getId() {
         return id;
+    }
+
+    public String getStringDate() {
+        return stringDate;
     }
 }

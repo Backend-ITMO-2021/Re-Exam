@@ -93,7 +93,7 @@ public class ApiController {
         List<MessageFilteredDto> res =
                 messages.stream().
                         filter(d -> !willFilter || isDateInInterval(start, end, d.getDate()))
-                        .map(m -> new MessageFilteredDto(m.getId(), m.getAuthor().getUsername(), m.getText()))
+                        .map(m -> new MessageFilteredDto(m.getId(), m.getStringDate(), m.getAuthor().getUsername(), m.getText()))
                         .collect(
                                 Collectors.toList());
 
